@@ -16,3 +16,5 @@ ET: 1 - 2 hours
 - since i had vague idea of requirement # 5, i didnt write it first. now i have. so now i'll also locate where and how the auth is being handled.
 
 - progress update: now that i have narrowed down the model i will use, it is labeledshape. but first i thought it should be labeledimage but then thought it would not contain all annotations so i decided to go for labeledshape (include root only), labeledimage, labeledtrack, tags, labeledinterval. i will get the count of these and then aggregate them.
+
+- progress update: now i will develop the ui web page, it will mostly be done by assistant.
