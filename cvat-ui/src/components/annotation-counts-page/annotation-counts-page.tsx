@@ -31,6 +31,7 @@ function AnnotationCountsPage(): JSX.Element {
     const [task, setTask] = useState<Task | null>(null);
     const [counts, setCounts] = useState<LabelAnnotationCount[]>([]);
     const [fetching, setFetching] = useState(true);
+    const [latencyMs, setLatencyMs] = useState<number | null>(null);
 
     useEffect(() => {
         if (!Number.isInteger(taskId)) {
@@ -38,12 +39,15 @@ function AnnotationCountsPage(): JSX.Element {
                 message: 'Invalid task id',
             });
             setFetching(false);
+            setLatencyMs(null);
             return;
         }
 
         let cancelled = false;
         setFetching(true);
+        setLatencyMs(null);
 
+        const t0 = performance.now();
         Promise.all([
             core.tasks.get({ id: taskId }),
             core.server.request(`/api/tasks/${taskId}/annotation-counts`, { method: 'GET' }),
@@ -61,6 +65,7 @@ function AnnotationCountsPage(): JSX.Element {
                 const payload = (response?.data ?? response) as AnnotationCountsResponse;
                 setTask(loadedTask);
                 setCounts(Array.isArray(payload?.counts) ? payload.counts : []);
+                setLatencyMs(Math.round(performance.now() - t0));
             })
             .catch((error: unknown) => {
                 if (cancelled) {
@@ -73,6 +78,7 @@ function AnnotationCountsPage(): JSX.Element {
                 });
                 setTask(null);
                 setCounts([]);
+                setLatencyMs(null);
             })
             .finally(() => {
                 if (!cancelled) {
@@ -109,6 +115,13 @@ function AnnotationCountsPage(): JSX.Element {
                                     )}
                                 </Title>
                             </Col>
+                            {latencyMs !== null && (
+                                <Col>
+                                    <Text className='cvat-annotation-counts-latency'>
+                                        {`Request latency: ${latencyMs} ms`}
+                                    </Text>
+                                </Col>
+                            )}
                         </Row>
                         {fetching && <CVATLoadingSpinner />}
                         {!fetching && task && (

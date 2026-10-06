@@ -25,6 +25,12 @@
     @include cvat-management-page-header;
 }
 
+.cvat-annotation-counts-latency {
+    color: $text-color-secondary;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
 .cvat-annotation-counts-chart {
     margin-top: $grid-unit-size * 2;
     height: 480px;
