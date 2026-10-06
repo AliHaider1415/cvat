@@ -13,4 +13,4 @@ why: this is my main question and target, bcz when i know this, i will be able t
 
 ET: 1 - 2 hours
 
--
+- since i had vague idea of requirement # 5, i didnt write it first. now i have. so now i'll also locate where and how the auth is being handled.
